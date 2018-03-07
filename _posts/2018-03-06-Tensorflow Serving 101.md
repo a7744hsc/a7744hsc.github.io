@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Tensorflow Serving Briefing"
+title:  "Tensorflow Serving 101"
 date:   2018-03-06 22:00:00 +0800
 categories: Machine Learning
 ---
@@ -18,7 +18,7 @@ Tensorflow Serving是google tensorflow开源项目下的一个子项目，官方
   - 不但可以直接与Tensorflow模型集成，也可以和其他模型一起使用（将模型编译成servable）。
   - 可以同时提供多个模型版本API -->
 
-要学习使用TF serving，最好的材料当然还是官方[文档][official-doc],但是在实践过程中我或多或少遇到一些问题，这里把他们记录下来作为对官方文档做一个补充。
+要学习使用TF serving，最好的材料当然还是官方[文档][official-doc],但是在实践过程中我或多或少遇到一些问题，这里把他们整理下来作为对官方文档做一个补充。本教程不是使用官方教程中MNIST手写数字识别模型，而是使用基于Facenet的人脸特征提取模型为例，但是TF serving部分基本一致。
 
 当你已经有了一个可用的模型一般只需要做下面两件事情即可将它部署到TF serving上，不过一般模型部署好之后还需要用一个客户端程序能够访问调用模型服务，所以本教程分三步：
 
@@ -27,7 +27,7 @@ Tensorflow Serving是google tensorflow开源项目下的一个子项目，官方
   3. [开发一个简易客户端来调用模型服务](#step-3)
 
 ### <a name="step-1"></a>1. 将模型导出成SavedModel
-[官方文档][official-doc]中的[示例代码][mnist_saved_model]给出了一个完整的模型创建和导出过程，但是如果你已经有了一个模型，你需要的只是以下几行代码（这段代码摘取自我的[人脸识别项目][my-face-recognize]中的convert_pretrained_model_to_savedModel.py，他讲一个预先训练好的模型转换成TF serving可用的模型）：
+[官方文档][official-doc]中的[示例代码][mnist_saved_model]给出了一个完整的模型创建和导出过程，但是如果你已经有了一个模型，你需要的只是以下几行代码（这段代码摘取自我的[人脸识别项目][my-face-recognize]中的`convert_pretrained_model_to_savedModel.py`，他将一个预先训练好的模型转换成TF serving可用的模型）：
 
 ```python
   # export model to savedmodel
@@ -107,11 +107,58 @@ Tensorflow Serving是google tensorflow开源项目下的一个子项目，官方
 
       ```
   
-  6. 最后一步，启动TF serving，并将生成的模型指定为提供服务的模型,这里的`model_name_str`可以自己指定，在后面客户端调用的时候会用得到。
+  6. 最后一步，启动TF serving，并将生成的模型指定为提供服务的模型,这里的`facenet`是模型的名称，可以任意指定，只要和客户端调用时使用相同字符串即可。
 
-```
-    tensorflow_model_server --port=9000 --model_name=model_name_str --model_base_path=/temp/
-```
+      ```
+      tensorflow_model_server --port=9000 --model_name='facenet' --model_base_path=/temp/
+      ```
+
+  到这里我们已经有了一个可以使用的TF serving 服务运行在本机的9000端口上。
+
+
+### <a name="step-3"></a>3. 构建一个可以调用TF serving的python客户端程序
+  TF serving使用gRPC进行远程调用，客户端可以使用TF serving中定义的proto文件在任何支持gRPC的语言下对其进行调用。不过在python中我们不需要自己导入proto，因为TF serving为我们提供了python的API供我们调用，我们需要做的只是安装`tensorflow-serving-api`库。 目前，`tensorflow-serving-api`官方只支持python2，但是社区开发者已经证明当前1.0.0版本的库也可以在python3下面使用，不过在python3下不能直接使用pip安装它，而是要手动将软件包下载下来解压后拷贝到python的`site-package`，目录下。关于`tensorflow-serving-api`安装，可以参考[这里](https://github.com/tensorflow/serving/issues/700)
+
+  安装完成后，我们可以用下面这段程序来调用TF serving库，由于代码涉及到gRPC调用比较复杂，特加入详细中文注释（这段代码摘取自我的[人脸识别项目][my-face-recognize]中的`tf_serving_client_demo.py`）
+
+    ```python
+    # 服务器IP和端口号
+    host, port = '127.0.0.1', '9000'
+
+    # 创建一个stub用来代表要调用的远程服务器，调用stub命令时相当于调用TF serving中的方法
+    channel = implementations.insecure_channel(host, int(port))
+    stub = prediction_service_pb2.beta_create_PredictionService_stub(channel)
+
+    # 根据ProtoBuf 创建请求对象，这里通过 TF servingAPI 快速创建一个Predict的请求
+    request = predict_pb2.PredictRequest()
+
+    # 指定模型名称，需要和我们启动TF serving 服务器时指定的名称相同
+    request.model_spec.name = 'facenet'
+
+
+    # 这里快速构建一个需要预测的图像，为了方面，直接截图图像的左上角
+    input_size = 160 #inception-resnet v1 模型的输入图像尺寸
+    picture = misc.imread('./resources/full_body_zh1.jpg')[:input_size, :input_size, :]
+    picture = picture.reshape([1, input_size, input_size, 3])
+    picture = picture.astype(np.float32)
+
+    # 下面代码为指定调用方法名（由于我们的模型只有一个默认方法，这里不需要指定方法名，所以注释掉）
+    # request.model_spec.signature_name = "serving_default"  
+
+    # 初始化输入参数，所有参数都要转换成对应的protobuf以在网络间传输，这里tf.contrib.util帮我们自动完成这些转换
+    request.inputs['images'].CopyFrom(
+        tf.contrib.util.make_tensor_proto(picture, shape=[1, input_size, input_size, 3]))
+    request.inputs['is_training'].CopyFrom(tf.contrib.util.make_tensor_proto(False))
+    # 调用predict方法，该方法会请求TF serving服务器
+    result = stub.Predict(request, 10.0)  # 10 为超时时间，单位为妙
+
+    # 得到返回结果，可以根据需求做进一步处理
+    print(np.array(result.outputs['scores'].float_val).shape)
+    ```
+  
+  到这里我们就有了一个功能相对完备的TF serving服务和客户端，之后模型升级，只需要把对应版本的模型文件拷贝进来即可。其实TF serving更像是一个Google提供给我们的模型服务器，我们只需生成相应的模型，然后使用它即可。 使用TF serving的难点一直都在编译安装上，记得去年TF serving要求最小16g的内存才能编译，这直接将我这种用比起本启虚拟机的开发者挡在门外。 现在通过提供预编译包和docker镜像，安装过程变得简单了许多。 不过考虑到TF serving一般会部署在生产环境，而且需要为不同硬件进行针对性（如CPU指令集，图形加速卡等）性能优化，所以编译安装也是一件合乎清理的事情。
+
+
 
 
 [official-doc]: https://www.tensorflow.org/serving/serving_basic
