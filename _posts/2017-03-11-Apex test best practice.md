@@ -99,7 +99,7 @@ IOpportunitiesSelectorInterface=MockOpportunitiesSelector
 All classes that you want to mock require an interface that can be used as a blueprint for generating the mock class
 ```java
 public interface IOpportunitiesSelector {
-	Map<Id, OpportunityLineItem> queryOpps(Set<Id> opportunityIds);
+    Map<Id, OpportunityLineItem> queryOpps(Set<Id> opportunityIds);
 }
 ```
 

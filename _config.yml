@@ -16,9 +16,9 @@
 title: Abner's Blog
 email: abner.q17@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  A personal blog. 
+  A light blog focus on machine learning. 
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://a7744hsc.github.io/" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: abner7474
 github_username:  a7744hsc
 

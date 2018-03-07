@@ -17,3 +17,4 @@ DL tips for Tips
 8. 算法，leetCode
 9. 深度学习，卷积神经网络，前沿,生成对抗网络
 10. tf,pyTorch,Caffe
+11. attention mode, neural GPU    conv GRU  LSTM 
