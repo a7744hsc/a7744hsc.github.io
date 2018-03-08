@@ -30,3 +30,6 @@ gems:
 exclude:
   - Gemfile
   - Gemfile.lock
+
+disqus:
+    shortname: a7744hsc
