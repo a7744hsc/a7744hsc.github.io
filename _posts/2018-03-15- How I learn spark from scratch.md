@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "How to learn Spark from scratch"
-date:   2018-03-15 18:00:00 +0800
+title: "How to learn Spark from scratch & Key points of Spark"
+date:  2018-03-15 18:00:00 +0800
 categories: Machine Learning
 ---
 
@@ -9,9 +9,9 @@ Recently, I was asked to join a spark project. But unfortunately，I knew nothin
 
 ## Which programming language should I use?
 
-Spark is written in Scala and most users wrting spark program with `Scala`. But spark also support other languages like `Python`, `Java` and `R`. I was trying to learn PySpark since I have some experience on Python, but I choosed Scala at last. The main reason are listed below:
+Spark is written in Scala and most users wrting spark program with `Scala`. But spark also support other languages like `Python`, `Java` and `R`. I was trying to learn PySpark since I have some experience on Python, but I choosed Scala at last. The main reasons are listed below:
 
-1. Since Scala is navive supported language, new scala features are always added to scala first.
+1. Since Scala is native supported language, new spark features are always added to scala API first.
 
 2. Many ideas in spark are borrowed from scala, the RDD is similiar with the scala collections. Learning scala, along with the functional thinking, is very helpful for learning Spark.
 
@@ -45,31 +45,19 @@ If you are not into reading, some MOOCs are also available for you. [This][couse
 
 2. Spend some time on learning sbt, you will use it all the time in scala project.
 
+## Spark Key Learnings
 
-## Scala key points
+After go through the tutorials and books, here are some key points I learned. This can be used as a quick learning material or a checkpoint of your learning.
 
-Coming soon... ^-^
-
-
-
-## Spark Key points
-
-
-<!-- RDD DataFrame DataSet
-
-    1. Spark 如果读取本地文件，则所有worker的对应目录上都应该有该文件。
-    2. 最好传递匿名函数或单例函数给spark，而不要传递实例函数（浪费资源）。
-    3. 
-
-并行计算和分布式计算主要区别是分布式计算需要考虑网络延迟。
-spark使用函数式编程理念来容错，不用写入硬盘，只有在错误恢复时才有网络传输，所以比hadoop快。
-RDD transformation 是lazy的
-RDD 里没有 foldleft，改变type只能是aggregate。
-reduceByKey 比 groupByKey更高效
-shuffle后的操作最好能persist，防止多次执行shuffle，有些操作会改掉partition。
-sparkSQL更加结构化，便于spark优化性能。 将关系型数据库和spark结合起来。
-Dataframe is RDD with schema，but it is untyped -->
-
+1. Spark can read files from HDFS or local file system. If you read file from local system, you need to put the file in the same path for each of the workers.
+2. Pass a class method or anonymous method to spark instead of instance method. Because spark will pass the whole instance to each worker and this will waste resources.
+3. When programming with Spark, the major concern is network latency, so we want to minimize the data transformation between workers.
+4. Spark implement fault tolerence with idea from functional programming. RDD in spark is immutable, when a worker is down spark can recalculaete the RDD based on the rule and original RDD.
+5. Transformations in RDD are lazy which means they won't be calculated until an action is called.
+6. When programming with RDD, we should think about reduce the shuffule operation since it is very time comsuming. We can achieve it by doing manually partition or creating narrow dependency RDDs.
+7. Differences between RDD, DataFrame and DataSet. RDD have the biggest flexibility but you need to take care of the performance. DataFrame and DataSet are structured interface build on the top of RDD, operations on them can be optimized by spark to achieve a relative higher performance. DataFrame is an untyped version of DataSet represented by DataSet[Rows]
+8. In spark, each task include several stages and each stage include several jobs. A stage include one shuffle operation, a job include one spark action.
+9. Spark streaming split the real time data stream into small data batches and perform operations on each of these data batches. So it can only achieve an at least 100ms delay(There are improvement in recent versions).
 
 
 
