@@ -103,14 +103,14 @@ Tensorflow Serving是google tensorflow开源项目下的一个子项目，官方
   5. 在docker外将刚刚生成的SavedModel复制到docker中，在terminal中运行如下代码：
 
       ```
-      docker cp ~/PROJECTS/python/Face-recognize-system/hchan/fake_facenet/tf_serving_model/ sleepy_hermann:/temp
+      docker cp ~/PROJECTS/python/Face-recognize-system/fake_facenet/tf_serving_model/ {name_of_your_container}:/temp
 
       ```
   
   6. 最后一步，启动TF serving，并将生成的模型指定为提供服务的模型,这里的`facenet`是模型的名称，可以任意指定，只要和客户端调用时使用相同字符串即可。
 
       ```
-      tensorflow_model_server --port=9000 --model_name='facenet' --model_base_path=/temp/
+      tensorflow_model_server --port=9000 --model_name='facefeature' --model_base_path=/temp/
       ```
 
   到这里我们已经有了一个可以使用的TF serving 服务运行在本机的9000端口上。
