@@ -57,4 +57,4 @@ CapsNet是一种思路，Hinton也说了论文中的实验方式只是一种最�
 
 [capsnet-paper]:https://arxiv.org/pdf/1710.09829.pdf
 [capsule-series-1]: https://medium.com/ai%C2%B3-theory-practice-business/understanding-hintons-capsule-networks-part-i-intuition-b4b559d1159b
-[capsule-series-chinese]: https://mp.weixin.qq.com/s?__biz=MzI3ODkxODU3Mg==&mid=2247484433&idx=1&sn=3afe4605bc2501eebbc41c6dd1af9572&chksm=eb4ee0d2dc3969c4619d6c1097d5c949c76c6c854e60d36eba4388da2c3855747818d062c90a&scene=21#wechat_redirect
+[capsule-series-chinese]: https://mp.weixin.qq.com/s/6CRSen8P6zKaMGtX8IRfqw
