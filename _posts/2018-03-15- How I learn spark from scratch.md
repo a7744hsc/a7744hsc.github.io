@@ -17,7 +17,7 @@ Spark is written in Scala and most users wrting spark program with `Scala`. But 
 
 3. Even though pysark gained more and more attention recently, there are more resources about spark on scala.
 
-It is always a trade-off when you make some decision, but I suggest scala if you are not just have a try. A good thing is that the API for python and scala is similiar, so you can easily move to another language.
+It is always a trade-off when you make some decision, but I suggest scala if you are not just have a try. A good thing is that the API for python and scala is similiar, so you can easily move to another language. You can find more details about the comparison between Spark on Scala and Python [here](https://www.datacamp.com/community/tutorials/apache-spark-python#language)
 
 ## What I want to know? 
 
