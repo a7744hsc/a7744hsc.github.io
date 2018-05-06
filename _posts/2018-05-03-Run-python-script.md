@@ -1,11 +1,10 @@
 ---
 layout: post
-title:  "Python -m 参数解析"
+title:  "Python -m 参数解析"
 date:   2018-05-03 11:00:00 +0800
 categories: Python
 ---
-<!-- 1. 静态方法和普通方法 -->
-<!-- 3. python 包中安装的命令 -->
+
 注: 本文中所有实验都在python3.6下进行
 
 ## 为什么引入这个选项？
