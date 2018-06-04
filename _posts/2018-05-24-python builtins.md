@@ -233,24 +233,3 @@ Python 3.6.5中包含68个内置方法,[官方文档](https://docs.python.org/3/
     ```
 
 
-<!-- 11. frozenset(iterable)
-
-12. globals()，locals()
-
-13. input([prompt])
-
-从命令行获取输入
-
-14. isinstance(object, classinfo) issubclass(class,classinfo)
-
-- isinstance用来判断一个对象是某一个类的实例。
-- issubclass用于判断对象是不是某个类的子类。
-
-15. memoryview
-
-
-16. zip()
-
-17. vars()
-
-18. __import__() -->
