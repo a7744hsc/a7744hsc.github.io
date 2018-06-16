@@ -154,4 +154,4 @@ time for memory view: 0.016571044921875
 
 17. __import__() 
 
-一种高级的import方法，如果不了解这个方法就尽量不要使用，该方法并不是为日常开发设计，可以考虑使用`importlib.import_module()`替代。
+一种高级的import方法，如果不了解这个方法就尽量不要使用，因为该方法并不是为日常开发设计的，可以考虑使用`importlib.import_module()`替代。
