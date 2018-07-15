@@ -6,7 +6,7 @@ categories: Python
 ---
 
 
-本文是[Logging HOWTO](https://docs.python.org/3/howto/logging.html)第一部分的翻译，介绍了如何使用logging及如何使用basicConfig来配置logging模块
+本文是[Logging HOWTO](https://docs.python.org/3/howto/logging.html)的翻译，包括两部分，第一部分介绍了python logging库的的基础使用方法，第二部分包括一些原理分析和高阶用法
 
 -------------------------------------
 
