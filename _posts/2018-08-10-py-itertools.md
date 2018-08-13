@@ -28,6 +28,7 @@ for i in count(0,5):
 ```
 
 2.  `cycle(iterable)`, 对给定的迭代器进行无限循环，如果迭代器内容较多，该操作可能会消耗大量内存。
+
 ```
 count =0
 for i in cycle([1,'A',2,'B']):
@@ -88,6 +89,7 @@ d
 ```
 
 3. `combinations(iterable, r)`： 返回一个包含输入的各种长度为`r`的组合的迭代器。通过下面例子能更好的解释：
+
 ```
 list(combinations([1,2,3,4],2))
 [(1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (3, 4)]
@@ -194,6 +196,7 @@ list(i2)
 ```
 
 12. `zip_longest(*iterables, fillvalue=None)`, 顾名思义，按较长的iterable来组合两个迭代器，空值用`fillvalue`代替，其默认值为None：
+
 ```
 for a,b in zip([1,2,3,4],['a','b','c']):
     print (a,b)
@@ -245,6 +248,7 @@ cb
 ```
 
 15. `combinations(iterable, r)`, 和`permutations`方法相似，只是这里编程了组合（不关注元素顺序）：
+
 ```
 for item in combinations(['a','b','c'],2):     
     print(''.join(item))
